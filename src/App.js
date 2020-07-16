@@ -40,7 +40,17 @@ class App extends Component {
   }
 
   deletePersonHandler = (personIndex) => {
-    const persons = this.state.Persons;
+    /* Note:- JavaScript Array and React State are reference type. So, whne we use splice then it 
+              already delete data from original React State and it's not a good prectice to use it.
+    
+    const persons = this.state.Persons;     
+    */
+    
+    /* for overcome from above issue we will use slice of the React State 
+      const persons = this.state.Persons.slice();
+    
+      or we can use below statement */
+    const persons = [...this.state.Persons];
     persons.splice(personIndex, 1);
     this.setState({persons: persons});
   }
