@@ -6,9 +6,9 @@ class App extends Component {
 
   state = {
     Persons: [
-      { name: 'Sharad', age: '33' },
-      { name: 'Sandeep', age: '29' },
-      { name: 'Kanchan', age: '30' }
+      { id: 101, name: 'Sharad', age: '33' },
+      { id: 102, name: 'Sandeep', age: '29' },
+      { id: 103, name: 'Kanchan', age: '30' }
     ],
     otherState: 'some other data!',
     showPersons: false
@@ -24,14 +24,22 @@ class App extends Component {
     })
   } 
 
-  nameChangedHandler = (event) => {
-    this.setState({
-      Persons: [
-          { name: 'Sharad Kumar Singh', age: '33' },
-          { name: event.target.value, age: '29' },
-          { name: 'Shikha Singh', age: '30' }
-      ]
+  nameChangedHandler = (event, id) => {
+    const personIndex = this.state.Persons.findIndex( p => {
+      return p.id === id;
     })
+
+    const person = {
+      ...this.state.Persons[personIndex]
+    }
+
+    person.name = event.target.value;
+
+    const persons = [...this.state.Persons];
+
+    persons[personIndex] = person;
+    
+    this.setState({ Persons: persons})
   }
 
   toggleNameHandler = () => {
@@ -52,7 +60,7 @@ class App extends Component {
       or we can use below statement */
     const persons = [...this.state.Persons];
     persons.splice(personIndex, 1);
-    this.setState({persons: persons});
+    this.setState({Persons: persons});
   }
 
   render(){
@@ -73,6 +81,7 @@ class App extends Component {
             {this.state.Persons.map((person, index) => {
                 return <Person key={index}
                             click={() => this.deletePersonHandler(index)} 
+                            changed={(event) => this.nameChangedHandler(event, person.id)}
                             name={person.name} 
                             age={person.age} />
               })}
