@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Radium, {StyleRoot} from 'radium';
+import ErrorBoundary from './ErrorBoundary/ErrorBoundary';
 import './App.css';
 import Person from './Person/Person';
 
@@ -71,11 +71,7 @@ class App extends Component {
       font: 'inherit',
       border: '1px solid blue',
       padding: '8px',
-      cursor: 'pointer',
-      ':hover': {
-        backgroundColor: 'lightgreen',
-        color: 'black'
-      }
+      cursor: 'pointer'
     };
 
     let persons = null;
@@ -84,13 +80,14 @@ class App extends Component {
       persons = (
           <div>
             {this.state.Persons.map((person, index) => {
-                return <Person key={index}
-                            click={() => this.deletePersonHandler(index)} 
+                return <ErrorBoundary key={index}>
+                    <Person click={() => this.deletePersonHandler(index)} 
                             changed={(event) => this.nameChangedHandler(event, person.id)}
                             name={person.name} 
                             age={person.age} />
+                  </ErrorBoundary>
               })}
-          </div> 
+          </div>          
       )
       style.backgroundColor = "Red";
       style[':hover'] = {
@@ -111,14 +108,12 @@ class App extends Component {
     }
 
     return (
-      <StyleRoot>
-        <div className="App">
-          <h1>Welcome to first React tutorial application!</h1>
-          <p className={classes.join(' ')}>This application is working fine!</p>
-          <button style={style} onClick={this.toggleNameHandler}>Show Content</button>
-          {persons}        
-        </div>
-      </StyleRoot>      
+      <div className="App">
+        <h1>Welcome to first React tutorial application!</h1>
+        <p className={classes.join(' ')}>This application is working fine!</p>
+        <button style={style} onClick={this.toggleNameHandler}>Show Content</button>
+        {persons}        
+      </div>
    );
   }
   
@@ -126,4 +121,4 @@ class App extends Component {
         React.createElement('h1',null, 'Welcome to first react tutorial application!'));*/
 }
 
-export default Radium(App);
+export default App;
