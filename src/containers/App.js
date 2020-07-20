@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import ErrorBoundary from './ErrorBoundary/ErrorBoundary';
+import Cockpit from '../components/Cockpit/Cockpit';
+import Persons from '../components/Persons/Persons';
 import './App.css';
-import Person from './Person/Person';
 
 class App extends Component {
 
@@ -14,16 +14,6 @@ class App extends Component {
     otherState: 'some other data!',
     showPersons: false
   }
-
-  switchNameHandler = (newName) => {
-    this.setState({
-      Persons: [
-          { name: newName, age: '33' },
-          { name: 'Sandeep Kumar Jena', age: '29' },
-          { name: 'Kanchan Thakur', age: '30' }
-      ]
-    })
-  } 
 
   nameChangedHandler = (event, id) => {
     const personIndex = this.state.Persons.findIndex( p => {
@@ -66,52 +56,25 @@ class App extends Component {
 
   render(){
 
-    const style = {
-      backgroundColor: 'green',
-      font: 'inherit',
-      border: '1px solid blue',
-      padding: '8px',
-      cursor: 'pointer'
-    };
-
     let persons = null;
 
     if(this.state.showPersons){
       persons = (
           <div>
-            {this.state.Persons.map((person, index) => {
-                return <ErrorBoundary key={index}>
-                    <Person click={() => this.deletePersonHandler(index)} 
-                            changed={(event) => this.nameChangedHandler(event, person.id)}
-                            name={person.name} 
-                            age={person.age} />
-                  </ErrorBoundary>
-              })}
+            <Persons persons={this.state.Persons}
+                     clicked={this.deletePersonHandler}
+                     changed={this.nameChangedHandler} />            
           </div>          
-      )
-      style.backgroundColor = "Red";
-      style[':hover'] = {
-        backgroundColor: '#ffcccb',
-        color: 'black'
-      }
-      
-    }
-
-    const classes = [];
-
-    if(this.state.Persons.length <= 2){
-      classes.push('red');
-    }
-
-    if(this.state.Persons.length <= 1){
-      classes.push('bold');
+      )      
     }
 
     return (
       <div className="App">
-        <h1>Welcome to first React tutorial application!</h1>
-        <p className={classes.join(' ')}>This application is working fine!</p>
-        <button style={style} onClick={this.toggleNameHandler}>Show Content</button>
+        <Cockpit 
+            showPersons={this.state.showPersons}
+            persons={this.state.Persons}
+            title={this.props.appTitle} 
+            clicked={this.toggleNameHandler} />
         {persons}        
       </div>
    );
